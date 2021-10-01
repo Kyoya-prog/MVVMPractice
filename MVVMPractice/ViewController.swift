@@ -8,11 +8,21 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private let passwordTextField: UITextField! = UITextField()
     private let validationLabel: UILabel! = UILabel()
 
+    private lazy var viewModel = ViewModel(
+        idTextObservable: idTextField.rx.text.asObservable(),
+        passwordTextObservable: passwordTextField.rx.text.asObservable(),
+        model: Model())
     private let vstack = UIStackView()
     private let disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        bindViews()
+    }
+    
+    private func bindViews(){
+        viewModel.validationText.bind(to: validationLabel.rx.text).disposed(by: disposeBag)
+        viewModel.loadLabelColor.bind(to: loadLabelColor).disposed(by: disposeBag)
     }
     
     private func setupView(){
