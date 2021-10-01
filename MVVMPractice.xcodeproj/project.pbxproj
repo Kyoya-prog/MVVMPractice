@@ -10,6 +10,7 @@
 		3D28CE5C27072C2400F98B99 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5B27072C2400F98B99 /* RxCocoa */; };
 		3D28CE5E27072C2400F98B99 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5D27072C2400F98B99 /* RxRelay */; };
 		3D28CE6027072C2400F98B99 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5F27072C2400F98B99 /* RxSwift */; };
+		3D9B60552707317200A9F0E4 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B60542707317200A9F0E4 /* Model.swift */; };
 		3DD0A0652706F45C0051B9C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A0642706F45C0051B9C8 /* AppDelegate.swift */; };
 		3DD0A0672706F45C0051B9C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A0662706F45C0051B9C8 /* SceneDelegate.swift */; };
 		3DD0A0692706F45C0051B9C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A0682706F45C0051B9C8 /* ViewController.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D9B60542707317200A9F0E4 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		3DD0A0612706F45C0051B9C8 /* MVVMPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MVVMPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DD0A0642706F45C0051B9C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DD0A0662706F45C0051B9C8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				3DD0A06D2706F4600051B9C8 /* Assets.xcassets */,
 				3DD0A06F2706F4600051B9C8 /* LaunchScreen.storyboard */,
 				3DD0A0722706F4600051B9C8 /* Info.plist */,
+				3D9B60542707317200A9F0E4 /* Model.swift */,
 			);
 			path = MVVMPractice;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 				3DD0A0692706F45C0051B9C8 /* ViewController.swift in Sources */,
 				3DD0A0652706F45C0051B9C8 /* AppDelegate.swift in Sources */,
 				3DD0A0672706F45C0051B9C8 /* SceneDelegate.swift in Sources */,
+				3D9B60552707317200A9F0E4 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
