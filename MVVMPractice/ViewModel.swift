@@ -13,7 +13,8 @@ final class ViewModel {
             .flatMap{ idText, passwordText -> Observable<Event<Void>> in
                 return model.validate(idText: idText, passwordText: passwordText).materialize()
             }
-            .share()
+            .share() // ViewController側で二つbind(subscribe)しており、ストリームが二つになるのを避けるためにHot変換している。
+                     //一応shareを使うことで、購読するまではあたいが流れないようにできる
         
         self.validationText = event
             .flatMap{ event -> Observable<String> in
@@ -26,7 +27,7 @@ final class ViewModel {
                 case .completed:
                     return .empty()
                 }
-            }.startWith("IDとPasswordを入力してください")
+            }.startWith("IDとPasswordを入力してください") //購読開始時に流す値
         
         self.loadLabelColor = event
             .flatMap{ event -> Observable<UIColor> in
@@ -35,6 +36,5 @@ final class ViewModel {
                 case .error: return .just(.red)
                 case .completed: return .empty()
                 }
-            }
-    }
+            }    }
 }
