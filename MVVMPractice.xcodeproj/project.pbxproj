@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D28CE5A27072C2400F98B99 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5927072C2400F98B99 /* RxBlocking */; };
 		3D28CE5C27072C2400F98B99 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5B27072C2400F98B99 /* RxCocoa */; };
 		3D28CE5E27072C2400F98B99 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5D27072C2400F98B99 /* RxRelay */; };
 		3D28CE6027072C2400F98B99 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE5F27072C2400F98B99 /* RxSwift */; };
-		3D28CE6227072C2400F98B99 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = 3D28CE6127072C2400F98B99 /* RxTest */; };
 		3DD0A0652706F45C0051B9C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A0642706F45C0051B9C8 /* AppDelegate.swift */; };
 		3DD0A0672706F45C0051B9C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A0662706F45C0051B9C8 /* SceneDelegate.swift */; };
 		3DD0A0692706F45C0051B9C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A0682706F45C0051B9C8 /* ViewController.swift */; };
@@ -61,11 +59,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D28CE6227072C2400F98B99 /* RxTest in Frameworks */,
 				3D28CE5E27072C2400F98B99 /* RxRelay in Frameworks */,
 				3D28CE5C27072C2400F98B99 /* RxCocoa in Frameworks */,
 				3D28CE6027072C2400F98B99 /* RxSwift in Frameworks */,
-				3D28CE5A27072C2400F98B99 /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,11 +150,9 @@
 			);
 			name = MVVMPractice;
 			packageProductDependencies = (
-				3D28CE5927072C2400F98B99 /* RxBlocking */,
 				3D28CE5B27072C2400F98B99 /* RxCocoa */,
 				3D28CE5D27072C2400F98B99 /* RxRelay */,
 				3D28CE5F27072C2400F98B99 /* RxSwift */,
-				3D28CE6127072C2400F98B99 /* RxTest */,
 			);
 			productName = MVVMPractice;
 			productReference = 3DD0A0612706F45C0051B9C8 /* MVVMPractice.app */;
@@ -657,11 +651,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3D28CE5927072C2400F98B99 /* RxBlocking */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3D28CE5827072C2400F98B99 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxBlocking;
-		};
 		3D28CE5B27072C2400F98B99 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3D28CE5827072C2400F98B99 /* XCRemoteSwiftPackageReference "RxSwift" */;
@@ -676,11 +665,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3D28CE5827072C2400F98B99 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
-		};
-		3D28CE6127072C2400F98B99 /* RxTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3D28CE5827072C2400F98B99 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxTest;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
