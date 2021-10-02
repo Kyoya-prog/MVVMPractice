@@ -4,58 +4,50 @@ import RxSwift
 import RxCocoa
 
 final class ViewController: UIViewController, UITextFieldDelegate {
-    private let idTextField: UITextField! = UITextField()
-    private let passwordTextField: UITextField! = UITextField()
-    private let validationLabel: UILabel! = UILabel()
-
-    private lazy var viewModel = ViewModel(
-        idTextObservable: idTextField.rx.text.asObservable(),
-        passwordTextObservable: passwordTextField.rx.text.asObservable(),
-        model: Model())
-    private let vstack = UIStackView()
-    private let disposeBag = DisposeBag()
+    private let searchTextField = UITextField()
+    private let repositoriesView = UITableView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        bindViews()
+        setUpSubViews()
     }
     
-    private func bindViews(){
-        viewModel.validationText.bind(to: validationLabel.rx.text).disposed(by: disposeBag)
-        viewModel.loadLabelColor.bind(to: loadLabelColor).disposed(by: disposeBag)
-    }
-    
-    private func setupView(){
-        vstack.translatesAutoresizingMaskIntoConstraints = false
-        vstack.axis = .vertical
-        vstack.alignment = .center
-        vstack.distribution = .equalSpacing
-        vstack.addArrangedSubview(idTextField)
-        vstack.addArrangedSubview(passwordTextField)
-        vstack.addArrangedSubview(validationLabel)
+    private func setUpSubViews(){
+        searchTextField.translatesAutoresizingMaskIntoConstraints = false
+        searchTextField.layer.cornerRadius = 5
+        searchTextField.layer.borderWidth = 1
+        view.addSubview(searchTextField)
         
-        idTextField.layer.borderWidth = 1
-        idTextField.layer.cornerRadius = 5
-        passwordTextField.layer.borderWidth = 1
-        passwordTextField.layer.cornerRadius = 5
-        
-        validationLabel.text = "validation"
-        
-        view.addSubview(vstack)
+        repositoriesView.translatesAutoresizingMaskIntoConstraints = false
+        repositoriesView.dataSource = self
+        view.addSubview(repositoriesView)
         NSLayoutConstraint.activate([
-            idTextField.widthAnchor.constraint(equalToConstant: 300),
-            passwordTextField.widthAnchor.constraint(equalToConstant: 300),
-            vstack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 200),
-            vstack.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            vstack.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            vstack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -100)
+            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 50),
+            searchTextField.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor,constant: 40),
+            searchTextField.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor,constant: -40),
+            searchTextField.heightAnchor.constraint(equalToConstant: 40),
+            
+            repositoriesView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor),
+            repositoriesView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            repositoriesView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            repositoriesView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    private var loadLabelColor: Binder<UIColor> {
-        return Binder(self) { me, color in
-            me.validationLabel.textColor = color
-        }
-} }
+}
+
+extension ViewController:UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = "test"
+        return cell
+    }
+    
+    
+}
 
 
 
