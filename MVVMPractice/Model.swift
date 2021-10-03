@@ -1,32 +1,30 @@
 import RxSwift
+import Foundation
+import UIKit
 
-enum ModelError: Error {
-    case invalidId
-    case invalidPassword
-    case invalidIdAndPassword
+struct Repository{
+    var title:String
 }
+
 protocol ModelProtocol {
-    func validate(idText: String?, passwordText: String?) -> Observable<Void>
+    var view:UIViewController?{get set}
+    func searchRepositories(keyword:String)->Single<[Repository]>
 }
 final class Model: ModelProtocol {
-    func validate(idText: String?, passwordText: String?) -> Observable<Void> {
-        switch (idText, passwordText) {
-        case (.none, .none):
-            return Observable.error(ModelError.invalidIdAndPassword)
-        case (.none, .some):
-            return Observable.error(ModelError.invalidId)
-        case (.some, .none):
-            return Observable.error(ModelError.invalidPassword)
-        case (let idText?, let passwordText?):
-            switch (idText.isEmpty, passwordText.isEmpty) {
-            case (true, true):
-                return Observable.error(ModelError.invalidIdAndPassword)
-            case (false, false):
-                return Observable.just(())
-            case (true, false):
-                return Observable.error(ModelError.invalidId)
-            case (false, true):
-                return Observable.error(ModelError.invalidPassword)
+    var view: UIViewController?
+    func searchRepositories(keyword: String)->Single<[Repository]> {
+        return Single<[Repository]>.create { observer -> Disposable in
+            let url = "https://api.github.com/search/repositories?q=\(keyword)"
+            let task = URLSession.shared.dataTask(with: URL(string: url)!) { [weak self](data, res, err) in
+                if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
+                    if let items = obj["items"] as? [[String: Any]] {
+                        let results = items.map{Repository(title: $0["full_name"] as? String ?? "")}
+                        observer(.success(results))
+                    }
+                }
             }
-} }
+            task.resume()
+            return Disposables.create()
+        }
+    }
 }
