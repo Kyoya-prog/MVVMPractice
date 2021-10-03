@@ -7,9 +7,26 @@ final class ViewController: UIViewController, UITextFieldDelegate {
     private let searchTextField = UITextField()
     private let repositoriesView = UITableView()
     
+    private let input: Input
+    private let output: Output
+    private let disposeBag = DisposeBag()
+    
+    init(viewModel: Input & Output = ViewModel()) {
+        self.input = viewModel
+        self.output = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         setUpSubViews()
+        inputBind()
+        outputBind()
     }
     
     private func setUpSubViews(){
@@ -19,7 +36,8 @@ final class ViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(searchTextField)
         
         repositoriesView.translatesAutoresizingMaskIntoConstraints = false
-        repositoriesView.dataSource = self
+        repositoriesView.register(UITableViewCell.self, forCellReuseIdentifier: "test")
+        //repositoriesView.dataSource = self
         view.addSubview(repositoriesView)
         NSLayoutConstraint.activate([
             searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 50),
@@ -33,6 +51,17 @@ final class ViewController: UIViewController, UITextFieldDelegate {
             repositoriesView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
+    private func inputBind(){
+        searchTextField.rx.text.orEmpty.asObservable().bind(to: input.searchKeyword).disposed(by: disposeBag)
+    }
+    
+    private func outputBind(){
+        output.repositories.bind(to: repositoriesView.rx.items(cellIdentifier: "test")){_, repository, cell in
+            cell.textLabel?.text = repository.title
+        }.disposed(by: disposeBag)
+    }
+    
 }
 
 extension ViewController:UITableViewDataSource{
