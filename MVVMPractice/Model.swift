@@ -8,18 +8,23 @@ struct Repository{
 
 protocol ModelProtocol {
     var view:UIViewController?{get set}
-    func searchRepositories(keyword:String)->Single<[Repository]>
+    func searchRepositories(keyword:String)->Observable<[Repository]>
 }
 final class Model: ModelProtocol {
     var view: UIViewController?
-    func searchRepositories(keyword: String)->Single<[Repository]> {
-        return Single<[Repository]>.create { observer -> Disposable in
+    func searchRepositories(keyword: String)->Observable<[Repository]> {
+        return Observable<[Repository]>.create { observer -> Disposable in
             let url = "https://api.github.com/search/repositories?q=\(keyword)"
-            let task = URLSession.shared.dataTask(with: URL(string: url)!) { [weak self](data, res, err) in
+            let task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, res, err) in
                 if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
+                    if let err = err {
+                        observer.onError(err)
+                        return
+                    }
                     if let items = obj["items"] as? [[String: Any]] {
                         let results = items.map{Repository(title: $0["full_name"] as? String ?? "")}
-                        observer(.success(results))
+                        observer.onNext(results)
+                        return
                     }
                 }
             }
