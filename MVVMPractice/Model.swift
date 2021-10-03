@@ -16,7 +16,8 @@ final class Model: ModelProtocol {
         return Observable<[Repository]>.create { observer -> Disposable in
             let url = "https://api.github.com/search/repositories?q=\(keyword)"
             let task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, res, err) in
-                if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
+                guard let data = data else { return observer.onNext([])}
+                if let obj = try! JSONSerialization.jsonObject(with: data) as? [String: Any] {
                     if let err = err {
                         observer.onError(err)
                         return
