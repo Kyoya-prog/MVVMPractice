@@ -1,40 +1,60 @@
 import Foundation
 import RxSwift
 import UIKit
+import RxRelay
 
-final class ViewModel {
-    let validationText: Observable<String>
-    let loadLabelColor: Observable<UIColor>
+protocol Input{
+    var searchKeyword:AnyObserver<String>{ get set }
+}
+
+protocol Output{
+    var repositories:Observable<[Repository]>{ get set }
+}
+
+final class ViewModel:Input,Output {
+    var view: UIViewController?
     
-    init(idTextObservable:Observable<String?>,passwordTextObservable:Observable<String?>,model:ModelProtocol){
-        let event = Observable
-            .combineLatest(idTextObservable, passwordTextObservable)
-            .skip(1)
-            .flatMap{ idText, passwordText -> Observable<Event<Void>> in
-                return model.validate(idText: idText, passwordText: passwordText).materialize()
+    var searchKeyword: AnyObserver<String>
+    
+    var repositories: Observable<[Repository]>
+    
+    let model = Model()
+    
+    let disposeBag = DisposeBag()
+    
+    init(model:ModelProtocol = Model()){
+        let _searchKeyword = PublishRelay<String>()
+
+        searchKeyword = AnyObserver<String>(){ event in
+            guard let text = event.element else { return }
+            _searchKeyword.accept(text)
             }
-            .share() // ViewController側で二つbind(subscribe)しており、ストリームが二つになるのを避けるためにHot変換している。
-                     //一応shareを使うことで、購読するまではあたいが流れないようにできる
-        
-        self.validationText = event
-            .flatMap{ event -> Observable<String> in
-                switch event {
-                    
-                case .next():
-                    return .just("OK!")
-                case .error(_):
-                    return .just("Error")
-                case .completed:
+            
+        let searchWithKeyword = _searchKeyword
+            .debounce(.milliseconds(300), scheduler: ConcurrentMainScheduler.instance)
+            .flatMap{ text -> Observable<String> in
+                guard text.count > 2 else {
                     return .empty()
                 }
-            }.startWith("IDとPasswordを入力してください") //購読開始時に流す値
+                return .just(text)
+            }
+            .share()
+        let b = Binder()
         
-        self.loadLabelColor = event
-            .flatMap{ event -> Observable<UIColor> in
-                switch event {
-                case .next: return .just(.green)
-                case .error: return .just(.red)
-                case .completed: return .empty()
-                }
-            }    }
+        let _repositories = PublishRelay<[Repository]>()
+        repositories = _repositories.asObservable()
+        
+        let searchResult = searchWithKeyword.flatMap{ text in
+            model.searchRepositories(keyword: text)
+                .materialize()
+        }
+            .share()
+        
+        searchResult.flatMap{ $0.element.map(Observable.just) ?? .empty()}.bind(to: _repositories).disposed(by: disposeBag)
+        
+        searchResult.flatMap{ $0.error.map(Observable.just) ?? .empty()}.subscribe { error in
+            print("エラーハンドリング",error)
+        }.disposed(by: disposeBag)
+    }
+
 }
